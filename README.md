@@ -1,6 +1,6 @@
 # NewConnect_StockMarket_Scanner
 
-Script containing two tools: getting single company data by ticker and NewConnect(Warsaw Stock Exchange market) market scanner using web scrapping
+Script containing two tools: getting single company data by ticker and NewConnect(Warsaw Stock Exchange market) market scanner using web scraping
 
 First tool: user need to enter the name of the company(ticker), starting year month and day. Obtaining data with get_data_stooq
 
