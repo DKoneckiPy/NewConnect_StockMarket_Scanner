@@ -21,22 +21,21 @@ Function ConvertTableToCSV(tableText As String) As String
     ' Nagłówek tabeli
     csv = "Format,Stawka1,Stawka2" & vbCrLf
     
-    ' Przekształć linie w wiersze tabeli
-    For i = 1 To UBound(lines) Step 3
-        If i + 2 <= UBound(lines) Then
-            csv = csv & Trim(lines(i)) & "," & Trim(lines(i + 1)) & "," & Trim(lines(i + 2)) & vbCrLf
+    ' Przekształć linie w wiersze tabeli, ignorując puste linie
+    Dim currentRow As String
+    For i = 0 To UBound(lines)
+        If Trim(lines(i)) <> "" Then
+            If currentRow = "" Then
+                currentRow = Trim(lines(i))
+            Else
+                currentRow = currentRow & "," & Trim(lines(i))
+                If InStr(currentRow, ",") = 2 Then ' Jeżeli currentRow zawiera 3 wartości
+                    csv = csv & currentRow & vbCrLf
+                    currentRow = ""
+                End If
+            End If
         End If
     Next i
 
     ConvertTableToCSV = csv
 End Function
-
-Sub SaveCSVToFile(csvData As String, filePath As String)
-    Dim fso As Object
-    Dim file As Object
-
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Set file = fso.CreateTextFile(filePath, True)
-    file.Write csvData
-    file.Close
-End Sub
