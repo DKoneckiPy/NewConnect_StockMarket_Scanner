@@ -9,12 +9,11 @@ Second tool: Extracting Data with BeautifulSoup from each page (Stooq divides th
 Data source: https://stooq.pl/q/i/?s=ncindex
 
 
-
-
 Function ConvertTableToCSV(tableText As String) As String
     Dim lines() As String
     Dim csv As String
     Dim i As Integer
+    Dim lineCount As Integer
 
     lines = Split(tableText, vbCrLf)
     
@@ -22,20 +21,23 @@ Function ConvertTableToCSV(tableText As String) As String
     csv = "Format,Stawka1,Stawka2" & vbCrLf
     
     ' Przekształć linie w wiersze tabeli, ignorując puste linie
-    Dim currentRow As String
+    lineCount = 0
     For i = 0 To UBound(lines)
         If Trim(lines(i)) <> "" Then
-            If currentRow = "" Then
-                currentRow = Trim(lines(i))
-            Else
-                currentRow = currentRow & "," & Trim(lines(i))
-                If InStr(currentRow, ",") = 2 Then ' Jeżeli currentRow zawiera 3 wartości
-                    csv = csv & currentRow & vbCrLf
-                    currentRow = ""
+            If lineCount Mod 3 = 0 Then
+                If lineCount > 0 Then
+                    csv = csv & vbCrLf
                 End If
+                csv = csv & Trim(lines(i))
+            Else
+                csv = csv & "," & Trim(lines(i))
             End If
+            lineCount = lineCount + 1
         End If
     Next i
 
     ConvertTableToCSV = csv
 End Function
+
+
+      
